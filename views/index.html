@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App</title>
+</head>
+<body>
+  <h1>Weather App</h1>
+  <form action="/weather" method="GET">
+    <label for="city">Enter City:</label>
+    <input type="text" id="city" name="city" required>
+    <button type="submit">Get Weather</button>
+  </form>
+  <div id="weather-info">
+    <!-- Weather data will be displayed here -->
+    <script>
+      // Function to display weather information
+      function displayWeatherInfo(weatherInfo) {
+        const weatherInfoElement = document.getElementById('weather-info');
+        weatherInfoElement.innerHTML = `
+          <p>Temperature: ${weatherInfo.temperature}°C</p>
+          <p>Feels Like: ${weatherInfo.feelsLike}°C</p>
+          <p>Min Temperature: ${weatherInfo.minTemperature}°C</p>
+          <p>Max Temperature: ${weatherInfo.maxTemperature}°C</p>
+          <p>Pressure: ${weatherInfo.pressure} hPa</p>
+          <p>Humidity: ${weatherInfo.humidity}%</p>
+        `;
+        weatherInfoElement.style.display = 'block'; // Display weather info
+      }
+    </script>
+  </div>
+</body>
+</html>
