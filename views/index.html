@@ -4,31 +4,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weather App</title>
+  <script src="/index.js" type="text/javascript" defer></script>
+
+
 </head>
 <body>
+    
   <h1>Weather App</h1>
   <form action="/weather" method="GET">
     <label for="city">Enter City:</label>
     <input type="text" id="city" name="city" required>
     <button type="submit">Get Weather</button>
   </form>
-  <div id="weather-info">
-    <!-- Weather data will be displayed here -->
-    <script>
-      // Function to display weather information
+ 
+  
+    <div id="weather-info"></div>
+        <!-- <p>Temperature: <span id="temperature"></span>°C</p>
+        <p>Feels Like: <span id="feels-like"></span>°C</p>
+        <p>Min Temperature: <span id="min-temperature"></span>°C</p>
+        <p>Max Temperature: <span id="max-temperature"></span>°C</p>
+        <p>Pressure: <span id="pressure"></span> hPa</p>
+        <p>Humidity: <span id="humidity"></span>%</p>
+      </div>
+     -->
+    <!-- <script>
+    
       function displayWeatherInfo(weatherInfo) {
-        const weatherInfoElement = document.getElementById('weather-info');
-        weatherInfoElement.innerHTML = `
-          <p>Temperature: ${weatherInfo.temperature}°C</p>
-          <p>Feels Like: ${weatherInfo.feelsLike}°C</p>
-          <p>Min Temperature: ${weatherInfo.minTemperature}°C</p>
-          <p>Max Temperature: ${weatherInfo.maxTemperature}°C</p>
-          <p>Pressure: ${weatherInfo.pressure} hPa</p>
-          <p>Humidity: ${weatherInfo.humidity}%</p>
-        `;
-        weatherInfoElement.style.display = 'block'; // Display weather info
+        
+        
+        weatherInfoElement.style.display = 'block'; 
       }
-    </script>
-  </div>
+    </script> -->
+    
 </body>
 </html>
