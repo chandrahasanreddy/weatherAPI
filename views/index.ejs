@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Weather App</title>
+		<script src="/index.js" defer></script>
+		<link
+			rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+		/>
+		<link rel="stylesheet" href="index.css" />
+	</head>
+	<body>
+		<div class="d-flex justify-content-between align-items-center mx-3">
+			<h1>Weather App</h1>
+			<form id="weather-form" class="input-group w-50">
+				<input
+					type="text"
+					class="form-control"
+					placeholder="Search for a City..."
+					aria-label="Search for a City..."
+					aria-describedby="button-addon2"
+          id="city"
+				/>
+				<button
+					class="btn btn-outline-secondary"
+					type="submit"
+					id="button-addon2"
+				>
+					Get Weather
+				</button>
+			</form>
+		</div>
+
+	
+		<div id="weather-info" class="container-fluid bg-dark text-white py-3">
+			<% if (weatherData) { %>
+			<div class="row">
+				<div class="col-12 col-md-6">
+					<h2 class="font-weight-bold mb-0">
+						<%= weatherData.name %>
+					</h2>
+				</div>
+				<div class="col-12 col-md-6 text-md-right">
+					<h1 class="display-4 font-weight-bold mb-0">
+						<%= weatherData.main.temp %>°C
+					</h1>
+					<p>Feels like <%= weatherData.main.feels_like %>°C</p>
+				</div>
+			</div>
+			<div class="row mt-3">
+				<div class="col-6 col-md-3">
+					<p>Min: <%= weatherData.main.temp_min %>°C</p>
+				</div>
+				<div class="col-6 col-md-3">
+					<p>Max: <%= weatherData.main.temp_max %>°C</p>
+				</div>
+				<div class="col-6 col-md-3">
+					<p>Weather: <%= weatherData.weather[0].description %></p>
+				</div>
+				<div class="col-6 col-md-3">
+					<p>Humidity: <%= weatherData.main.humidity %>%</p>
+				</div>
+			</div>
+			<% } %>
+		</div>
+		<div id="background-image" class="jumbotron"></div>
+
+		<!-- Weather Alerts -->
+		<div id="weather-alerts" class="container my-4">
+		</div>
+
+		<!-- Pagination Controls -->
+		<nav aria-label="Weather alerts pagination" id="pagination-wrapper">
+			
+			
+
+		</nav>
+		<script src="//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/d3.min.js"></script>
+		<script>
+			window.myWidgetParam
+				? window.myWidgetParam
+				: (window.myWidgetParam = []);
+			window.myWidgetParam.push({
+				id: 11,
+				cityid: "1269844",
+				appid: "3583598f2905696b1295fb5241a59448",
+				units: "metric",
+				containerid: "openweathermap-widget-11",
+			});
+			(function () {
+				var script = document.createElement("script");
+				script.async = true;
+				script.charset = "utf-8";
+				script.src =
+					"//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/weather-widget-generator.js";
+				var s = document.getElementsByTagName("script")[0];
+				s.parentNode.insertBefore(script, s);
+			})();
+		</script>
+	</body>
+</html>

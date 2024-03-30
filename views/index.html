@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weather App</title>
   <script src="/index.js" type="text/javascript" defer></script>
-
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="index.css">
 
 </head>
 <body>
@@ -17,24 +18,34 @@
     <button type="submit">Get Weather</button>
   </form>
  
-  
-    <div id="weather-info"></div>
-        <!-- <p>Temperature: <span id="temperature"></span>°C</p>
-        <p>Feels Like: <span id="feels-like"></span>°C</p>
-        <p>Min Temperature: <span id="min-temperature"></span>°C</p>
-        <p>Max Temperature: <span id="max-temperature"></span>°C</p>
-        <p>Pressure: <span id="pressure"></span> hPa</p>
-        <p>Humidity: <span id="humidity"></span>%</p>
-      </div>
-     -->
-    <!-- <script>
     
-      function displayWeatherInfo(weatherInfo) {
-        
-        
-        weatherInfoElement.style.display = 'block'; 
-      }
-    </script> -->
+    <div id="weather-info" class="container-fluid bg-dark text-white py-3">
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <h2 id="weather-city" class="font-weight-bold mb-0">{City}</h2>
+          </div>
+          <div class="col-12 col-md-6 text-md-right">
+            <h1 id="weather-temp" class="display-4 font-weight-bold mb-0">{Temperature}°C</h1>
+            <p id="weather-feels-like">Feels like {FeelsLike}°C</p>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-6 col-md-3">
+            <p id="weather-min">Min: {MinTemperature}°C</p>
+          </div>
+          <div class="col-6 col-md-3">
+            <p id="weather-max">Max: {MaxTemperature}°C</p>
+          </div>
+          <div class="col-6 col-md-3">
+            <p id="weather-type">Weather: {weather}</p>
+          </div>
+          <div class="col-6 col-md-3">
+            <p id="weather-humidity">Humidity: {Humidity}%</p>
+          </div>
+        </div>
+      </div>
+    <div id="background-image" class="jumbotron"></div>
+    <a class="weatherwidget-io" href="https://forecast7.com/en/40d71n74d01/new-york/" data-label_1={weatherInfo.city} value={{weatherInfo.city}} data-label_2="WEATHER" data-theme="original" >NEW YORK WEATHER</a>
     
 </body>
 </html>
