@@ -34,8 +34,6 @@ app.get("/", async (req, res) => {
   try {
     const defaultCity = 'Hyderabad';
     const weatherData = await getWeatherData(defaultCity);
-    // Since you're serving a static HTML file, you should use res.sendFile
-    // And you will handle data population on the client-side
     res.render("index", { weatherData: weatherData });
   } catch (error) {
     console.error("Error fetching weather data:", error);
@@ -43,12 +41,12 @@ app.get("/", async (req, res) => {
   }
 });
 
-// Route to get weather data for a specific city
+
 app.get("/weather", async (req, res) => {
   const city = req.query.city;
   try {
     const weatherData = await getWeatherData(city);
-    res.json(weatherData); // Send JSON response for client-side JavaScript to handle
+    res.json(weatherData); 
   } catch (error) {
     console.error("Error fetching weather data:", error);
    

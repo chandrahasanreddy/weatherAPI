@@ -105,7 +105,7 @@ function updateBackgroundImage(weatherCondition) {
 	const backgroundImage = document.getElementById("background-image");
 	let imageUrl = "";
 
-	// Set image URL based on weather condition
+	// background image based on weather condition
 	switch (weatherCondition.toLowerCase()) {
 		case "thunderstorm":
 			imageUrl = "/thunderstorm.gif";
@@ -127,7 +127,6 @@ function updateBackgroundImage(weatherCondition) {
 			imageUrl = "default.jpg";
 	}
 
-	// Set background image
 	backgroundImage.style.backgroundImage = `url('${imageUrl}')`;
 }
 
@@ -169,7 +168,6 @@ function displayWeatherAlertsForPage(page) {
 }
 
 function getPageRange(selectedPage, totalPages, displayCount) {
-	// Calculate the start and end page numbers
 	let startPage = Math.max(
 		1,
 		Math.min(
@@ -178,7 +176,6 @@ function getPageRange(selectedPage, totalPages, displayCount) {
 		)
 	);
 	let endPage = Math.min(totalPages, startPage + displayCount - 1);
-	// Adjust the start page if the end page is less than the display count
 	startPage = Math.max(1, endPage - displayCount + 1);
 	return [startPage, endPage];
 }
@@ -196,7 +193,7 @@ function updatePaginationControls() {
         <p class="text-center">Total Available pages are ${totalPages}</p>
       `;
 	const paginationContainer = document.getElementById("pagination-controls");
-	paginationContainer.innerHTML = ""; // Clear existing controls
+	paginationContainer.innerHTML = ""; 
 
 	// Previous button
 	const prevDisabled = currentPage === 1 ? " disabled" : "";
@@ -230,7 +227,7 @@ function updatePaginationControls() {
       </li>`;
 }
 
-// Called when a pagination control is clicked
+// pagination control
 function changePage(newPage) {
 	const totalPages = Math.ceil(alertsData.length / itemsPerPage);
 	if (newPage >= 1 && newPage <= totalPages) {
@@ -242,13 +239,11 @@ function changePage(newPage) {
 
 function displayWeatherAlerts(alerts) {
 	const alertsContainer = document.getElementById("weather-alerts");
-	// Start with an empty string to accumulate our HTML
 	let alertsHTML = "";
 
-	// Loop over the alerts array to build up the HTML for each card
+	// Looping over the alerts array to build up the HTML for each card
 	alerts.forEach((alert) => {
 		const { properties } = alert;
-		// Use the properties of each alert to populate the card's content
 		alertsHTML += `
         <div class="card text-center mb-3">
           <div class="card-header">${properties.headline}</div>
@@ -263,6 +258,5 @@ function displayWeatherAlerts(alerts) {
       `;
 	});
 
-	// Set the innerHTML of the alerts container to the alertsHTML
 	alertsContainer.innerHTML = alertsHTML;
 }
