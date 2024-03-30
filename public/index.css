@@ -1,0 +1,15 @@
+/* Add any additional styles here */
+#background-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    z-index: -1; /* Ensure the background image is behind other content */
+  }
+
+  .bg-dark {
+    background-color: #255382!important;
+}
+  
