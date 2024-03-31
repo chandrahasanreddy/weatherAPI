@@ -3,7 +3,8 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Weather App</title>
+		<!-- <div>Logo made by <a href="https://www.designevo.com/" title="Free Online Logo Maker">DesignEvo free logo creator</a></div> -->
+		
 		<script src="/index.js" defer></script>
 		<link
 			rel="stylesheet"
@@ -12,9 +13,15 @@
 		<link rel="stylesheet" href="index.css" />
 	</head>
 	<body>
-		<div class="d-flex justify-content-between align-items-center mx-3">
-			<h1>Weather App</h1>
-			<form id="weather-form" class="input-group w-50">
+		<!-- <div class="d-flex justify-content-between align-items-center mx-3"> -->
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<a class="navbar-brand" href="#">
+					<img src="logo.png" alt="Weather Supply Logo" width="100" height="100">
+					
+				  </a>
+			<!-- <h1>Weather App</h1> -->
+			
+			<form id="weather-form" class="input-group ml-auto w-50">
 				<input
 					type="text"
 					class="form-control"
@@ -31,10 +38,11 @@
 					Get Weather
 				</button>
 			</form>
-		</div>
+		</nav>
+		<!-- </div> -->
 
 	
-		<div id="weather-info" class="container-fluid bg-dark text-white py-3">
+		<!-- <div id="weather-info" class="container-fluid bg-dark text-white py-3">
 			<% if (weatherData) { %>
 			<div class="row">
 				<div class="col-12 col-md-6">
@@ -64,7 +72,51 @@
 				</div>
 			</div>
 			<% } %>
-		</div>
+		</div>  -->
+
+		<div id="weather-info" >
+		<div class="container mt-4">
+			<% if (weatherData) { %>
+			  <div class="card bg-light mb-3">
+				<div class="card-body text-center">
+				  <h2 class="card-title">Today's Weather <%= weatherData.name %></h2>
+				  <h3 class="display-3"><%= weatherData.main.temp %>°C</h3>
+				  <p class="lead">Feels like <%= weatherData.main.feels_like %>°C</p>
+				  <div class="row">
+					<div class="col">
+					  <p>Min: <%= weatherData.main.temp_min %>°C</p>
+					</div>
+					<div class="col">
+					  <p>Max: <%= weatherData.main.temp_max %>°C</p>
+					</div>
+					<div class="col">
+					  <p>Weather: <%= weatherData.weather[0].description %></p>
+					</div>
+					<div class="col">
+					  <p>Humidity: <%= weatherData.main.humidity %>%</p>
+					</div>
+				  </div>
+				</div>
+			  </div>
+		  
+			  <div class="card bg-light mb-3">
+				<div class="card-body">
+				  <h4 class="card-title">Air Quality Index</h4>
+				  <p class="card-text">Data not available</p>
+				</div>
+			  </div>
+		  
+			  <div class="card bg-light mb-3">
+				<div class="card-body">
+				  <h4 class="card-title">Other Weather Details</h4>
+				  <p class="card-text">Data not available</p>
+				</div>
+			  </div>
+			<% } %>
+		  </div>
+		   </div>
+
+
 		<div id="background-image" class="jumbotron"></div>
 
 		<!-- Weather Alerts -->
