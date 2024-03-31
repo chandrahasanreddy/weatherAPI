@@ -31,7 +31,7 @@ async function fetchWeather(lat, lon) {
 		const response = await fetch(weatherURL);
 		const weatherData = await response.json();
 		console.log(weatherData);
-		const weatherInfo = {
+		let weatherInfo = {
 			temperature: weatherData.main.temp,
 			feelsLike: weatherData.main.feels_like,
 			minTemperature: weatherData.main.temp_min,
@@ -41,6 +41,7 @@ async function fetchWeather(lat, lon) {
 			name: weatherData.name,
 		};
 		weatherConditionUpdate(Number(weatherData.weather[0].id));
+		weatherInfo = await fetchAirQualityData(lat, lon, apiKey, weatherInfo);
 		displayWeatherInfo(weatherInfo);
 	} catch (error) {
 		console.error("Error fetching weather data:", error);
@@ -52,11 +53,15 @@ document.querySelector("form").addEventListener("submit", async (event) => {
 	const city = document.getElementById("city").value;
 	const apiKey = "3583598f2905696b1295fb5241a59448";
 	const weatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+	
 	try {
+
+		const { lat, lon } = await fetchCityCoordinates(city, apiKey);
+		console.log(lat,lon)
 		const response = await fetch(weatherURL);
 		const weatherData = await response.json();
 		console.log(weatherData);
-		const weatherInfo = {
+		let weatherInfo = {
 			temperature: weatherData.main.temp,
 			feelsLike: weatherData.main.feels_like,
 			minTemperature: weatherData.main.temp_min,
@@ -66,39 +71,125 @@ document.querySelector("form").addEventListener("submit", async (event) => {
 			name: weatherData.name,
 		};
 		weatherConditionUpdate(Number(weatherData.weather[0].id));
+		weatherInfo = await fetchAirQualityData(lat, lon, apiKey, weatherInfo);
 		displayWeatherInfo(weatherInfo);
 	} catch (error) {
 		console.error("Error fetching weather data:", error);
 	}
 });
 
+
+async function fetchCityCoordinates(city, apiKey) {
+	const geoURL = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${apiKey}`;
+	try {
+	  const response = await fetch(geoURL);
+	  const data = await response.json();
+	  if (data.length > 0) {
+		return { lat: data[0].lat, lon: data[0].lon };
+	  } else {
+		throw new Error('City not found');
+	  }
+	} catch (error) {
+	  console.error("Error fetching city coordinates:", error);
+	  throw error; 
+	}
+  }
+
+
+  async function fetchAirQualityData(lat,lon,apiKey,weatherInfo) {
+	const airQualityURL = `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+	try {
+	  const response = await fetch(airQualityURL);
+	  const airQualityData = await response.json();
+
+	  const currentAirQuality = airQualityData.list[0];
+
+    weatherInfo.aqi = currentAirQuality.main.aqi;
+    weatherInfo.pm2_5 = currentAirQuality.components.pm2_5; 
+    weatherInfo.pm10 = currentAirQuality.components.pm10;
+	
+	return weatherInfo
+	} catch (error) {
+	  console.error("Error fetching air quality data:", error);
+	  throw error; 
+	}
+  }
+
+
 function displayWeatherInfo(weatherInfo) {
-	document.getElementById("weather-info").innerHTML = `
+  document.getElementById('weather-info').innerHTML = `
+    <div class="container mt-4">
+      <!-- First Section - Weather Data -->
+      <div class="card bg-light mb-3">
+        <div class="card-body text-center">
+
+		<div class="row align-items-center">
+		<!-- Logo Column -->
+		<div class="col-md-4 text-center">
+		  <img src="weather-app.png" alt="Logo" class="img-fluid" style="max-width: 150px;"> 
+		</div>
+		<!-- Weather Information Column -->
+		<div class="col-md-8 text-left">
+		  <h2 class="card-title">Today's Weather ${weatherInfo.name}</h2>
+		  <h3 class="display-3">${weatherInfo.temperature}°C</h3>
+		  <p class="lead">Feels like ${weatherInfo.feelsLike}°C</p>
+		</div>
+	  </div>
+          <div class="row">
+            <div class="col">
+              <p>Min: ${weatherInfo.minTemperature}°C</p>
+            </div>
+            <div class="col">
+              <p>Max: ${weatherInfo.maxTemperature}°C</p>
+            </div>
+            <div class="col">
+              <p>Weather: ${weatherInfo.weather}</p>
+            </div>
+            <div class="col">
+              <p>Humidity: ${weatherInfo.humidity}%</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-light mb-3">
+  <div class="card-body">
+    <div class="row align-items-center">
+      <!-- Logo Column -->
+      <div class="col-md-2 text-center">
+        <img src="air-quality.png" alt="Air Quality Logo" class="img-fluid" style="max-width: 100px;">
+      </div>
+      <!-- Air Quality Information Column -->
+      <div class="col-md-10">
+        <h4 class="card-title">Air Quality ${weatherInfo.name}</h4>
         <div class="row">
-          <div class="col-12 col-md-6">
-            <h2 class="font-weight-bold mb-0">${weatherInfo.name}</h2>
+          <div class="col">
+            <p>Air Quality Index: ${weatherInfo.aqi}</p>
           </div>
-          <div class="col-12 col-md-6 text-md-right">
-            <h1 class="display-4 font-weight-bold mb-0">${weatherInfo.temperature}°C</h1>
-            <p>Feels like ${weatherInfo.feelsLike}°C</p>
+          <div class="col">
+            <p>PM 2.5: ${weatherInfo.pm2_5}</p>
           </div>
-        </div>
-        <div class="row mt-3">
-          <div class="col-6 col-md-3">
-            <p>Min: ${weatherInfo.minTemperature}°C</p>
-          </div>
-          <div class="col-6 col-md-3">
-            <p>Max: ${weatherInfo.maxTemperature}°C</p>
-          </div>
-          <div class="col-6 col-md-3">
-            <p>Weather: ${weatherInfo.weather}</p>
-          </div>
-          <div class="col-6 col-md-3">
-            <p>Humidity: ${weatherInfo.humidity}%</p>
+          <div class="col">
+            <p>PM 10: ${weatherInfo.pm10}</p>
           </div>
         </div>
-      `;
+      </div>
+    </div>
+  </div>
+</div>
+
+
+      <!-- Third Section - Other Weather Details (Placeholder) -->
+      <div class="card bg-light mb-3">
+        <div class="card-body">
+          <h4 class="card-title">Other Weather Details</h4>
+          <p class="card-text">Data not available</p>
+        </div>
+      </div>
+    </div>
+  `;
 }
+
 
 function updateBackgroundImage(weatherCondition) {
 	console.log("hey" + weatherCondition);
