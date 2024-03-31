@@ -91,7 +91,7 @@ async function fetchCityCoordinates(city, apiKey) {
 	  }
 	} catch (error) {
 	  console.error("Error fetching city coordinates:", error);
-	  throw error; // Rethrowing the error to handle it in the calling function
+	  throw error; 
 	}
   }
 
@@ -104,21 +104,19 @@ async function fetchCityCoordinates(city, apiKey) {
 
 	  const currentAirQuality = airQualityData.list[0];
 
-    // Add the air quality data to the weatherInfo object
-    weatherInfo.aqi = currentAirQuality.main.aqi; // Air Quality Index
-    weatherInfo.pm2_5 = currentAirQuality.components.pm2_5; // PM2.5 value
+    weatherInfo.aqi = currentAirQuality.main.aqi;
+    weatherInfo.pm2_5 = currentAirQuality.components.pm2_5; 
     weatherInfo.pm10 = currentAirQuality.components.pm10;
 	
 	return weatherInfo
 	} catch (error) {
 	  console.error("Error fetching air quality data:", error);
-	  throw error; // Rethrowing the error to handle it in the calling function
+	  throw error; 
 	}
   }
 
 
 function displayWeatherInfo(weatherInfo) {
-  // Assuming weatherInfo contains all necessary data
   document.getElementById('weather-info').innerHTML = `
     <div class="container mt-4">
       <!-- First Section - Weather Data -->
