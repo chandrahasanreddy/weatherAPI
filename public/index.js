@@ -1,4 +1,4 @@
-module.exports ={fetchAirQualityData,weatherConditionUpdate};
+// module.exports ={fetchAirQualityData,weatherConditionUpdate};
 let currentPage = 1;
 const itemsPerPage = 1;
 let alertsData = [];
@@ -31,6 +31,11 @@ async function fetchWeather(lat, lon) {
 	try {
 		const response = await fetch(weatherURL);
 		const weatherData = await response.json();
+
+		const { sys } = weatherData;
+        const sunrise = convertUnixTimestampToTime(sys.sunrise);
+        const sunset = convertUnixTimestampToTime(sys.sunset);
+
 		console.log(weatherData);
 		let weatherInfo = {
 			temperature: weatherData.main.temp,
@@ -42,7 +47,9 @@ async function fetchWeather(lat, lon) {
 			name: weatherData.name,
 			windSpeed:weatherData.wind.speed,
 			windDegree:weatherData.wind.deg,
-			dust:weatherData.main.gust,
+			gust:weatherData.wind.gust,
+			sunrise:sunrise,
+			sunset:sunset,
 		};
 		weatherConditionUpdate(Number(weatherData.weather[0].id));
 		weatherInfo = await fetchAirQualityData(lat, lon, apiKey, weatherInfo);
@@ -52,6 +59,13 @@ async function fetchWeather(lat, lon) {
 	}
 }
 
+
+function convertUnixTimestampToTime(unixTimestamp) {
+    const date = new Date(unixTimestamp * 1000); // Convert Unix timestamp to milliseconds
+    const hours = date.getHours().toString().padStart(2, '0'); // Get hours (with leading zero if needed)
+    const minutes = date.getMinutes().toString().padStart(2, '0'); // Get minutes (with leading zero if needed)
+    return `${hours}:${minutes}`;
+}
 
 async function callWeather() {
 	// event.preventDefault();
@@ -65,6 +79,12 @@ async function callWeather() {
 		console.log(lat,lon)
 		const response = await fetch(weatherURL);
 		const weatherData = await response.json();
+
+		const { sys } = weatherData;
+        const sunrise = convertUnixTimestampToTime(sys.sunrise);
+        const sunset = convertUnixTimestampToTime(sys.sunset);
+
+
 		console.log(weatherData);
 		let weatherInfo = {
 			temperature: weatherData.main.temp,
@@ -76,7 +96,9 @@ async function callWeather() {
 			name: weatherData.name,
 			windSpeed:weatherData.wind.speed,
 			windDegree:weatherData.wind.deg,
-			dust:weatherData.main.gust,
+			gust:weatherData.wind.gust,
+			sunrise:sunrise,
+			sunset:sunset,
 		};
 		weatherConditionUpdate(Number(weatherData.weather[0].id));
 		weatherInfo = await fetchAirQualityData(lat, lon, apiKey, weatherInfo);
