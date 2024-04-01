@@ -1,8 +1,9 @@
-//function to get the latitude and longitude details on page load
-
+module.exports ={fetchAirQualityData,weatherConditionUpdate};
 let currentPage = 1;
 const itemsPerPage = 1;
 let alertsData = [];
+
+
 
 document.addEventListener("DOMContentLoaded", () => {
 	fetchWeatherAlerts();
@@ -39,6 +40,9 @@ async function fetchWeather(lat, lon) {
 			weather: weatherData.weather[0].description,
 			humidity: weatherData.main.humidity,
 			name: weatherData.name,
+			windSpeed:weatherData.wind.speed,
+			windDegree:weatherData.wind.deg,
+			dust:weatherData.main.gust,
 		};
 		weatherConditionUpdate(Number(weatherData.weather[0].id));
 		weatherInfo = await fetchAirQualityData(lat, lon, apiKey, weatherInfo);
@@ -48,8 +52,9 @@ async function fetchWeather(lat, lon) {
 	}
 }
 
-document.querySelector("form").addEventListener("submit", async (event) => {
-	event.preventDefault();
+
+async function callWeather() {
+	// event.preventDefault();
 	const city = document.getElementById("city").value;
 	const apiKey = "3583598f2905696b1295fb5241a59448";
 	const weatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
@@ -69,6 +74,9 @@ document.querySelector("form").addEventListener("submit", async (event) => {
 			weather: weatherData.weather[0].description,
 			humidity: weatherData.main.humidity,
 			name: weatherData.name,
+			windSpeed:weatherData.wind.speed,
+			windDegree:weatherData.wind.deg,
+			dust:weatherData.main.gust,
 		};
 		weatherConditionUpdate(Number(weatherData.weather[0].id));
 		weatherInfo = await fetchAirQualityData(lat, lon, apiKey, weatherInfo);
@@ -76,7 +84,7 @@ document.querySelector("form").addEventListener("submit", async (event) => {
 	} catch (error) {
 		console.error("Error fetching weather data:", error);
 	}
-});
+}
 
 
 async function fetchCityCoordinates(city, apiKey) {
@@ -116,80 +124,71 @@ async function fetchCityCoordinates(city, apiKey) {
   }
 
 
-function displayWeatherInfo(weatherInfo) {
-  document.getElementById('weather-info').innerHTML = `
-    <div class="container mt-4">
-      <!-- First Section - Weather Data -->
-      <div class="card bg-light mb-3">
-        <div class="card-body text-center">
-
-		<div class="row align-items-center">
-		<!-- Logo Column -->
-		<div class="col-md-4 text-center">
-		  <img src="weather-app.png" alt="Logo" class="img-fluid" style="max-width: 150px;"> 
+  function displayWeatherInfo(weatherInfo) {
+	document.getElementById('weather-info').innerHTML = `
+	  <div class="container mt-4">
+		<!-- Weather Data Section -->
+		<div class="card-deck">
+		  <!-- Logo and Weather Info -->
+		  <div class="card bg-light mb-3">
+			<div class="card-body text-center">
+			  <div class="row align-items-center">
+				<div class="col-md-4 text-center">
+				  <img src="weather-app.png" alt="Logo" class="img-fluid" style="max-width: 150px;"> 
+				</div>
+				<div class="col-md-8 text-left">
+				  <h2 class="card-title">Today's Weather ${weatherInfo.name}</h2>
+				  <h3 class="display-3">${weatherInfo.temperature}°C</h3>
+				  <p class="lead">Feels like ${weatherInfo.feelsLike}°C</p>
+				  <p>Min: ${weatherInfo.minTemperature}°C</p>
+				  <p>Max: ${weatherInfo.maxTemperature}°C</p>
+				  <p>Weather: ${weatherInfo.weather}</p>
+				  <p>Humidity: ${weatherInfo.humidity}%</p>
+				</div>
+			  </div>
+			</div>
+		  </div>
 		</div>
-		<!-- Weather Information Column -->
-		<div class="col-md-8 text-left">
-		  <h2 class="card-title">Today's Weather ${weatherInfo.name}</h2>
-		  <h3 class="display-3">${weatherInfo.temperature}°C</h3>
-		  <p class="lead">Feels like ${weatherInfo.feelsLike}°C</p>
+		<!-- Additional Information Section -->
+		<div class="card-deck">
+		  <!-- Air Quality Information Block -->
+		  <div class="card mb-3">
+			<div class="card-body">
+			  <h4 class="card-title">Air Quality </h4>
+			  <p>Air Quality Index: ${weatherInfo.aqi}</p>
+			  <p>PM 2.5: ${weatherInfo.pm2_5}</p>
+			  <p>PM 10: ${weatherInfo.pm10}</p>
+			</div>
+		  </div>
+		  <!-- Wind Information Block -->
+		  <div class="card mb-3">
+			<div class="card-body">
+			  <h4 class="card-title">Wind</h4>
+			  <p>Speed: ${weatherInfo.windSpeed} m/s</p>
+			  <p>Direction: ${weatherInfo.windDegree}°</p>
+			  <p>Dust: ${weatherInfo.dust} µg/m3</p>
+			</div>
+		  </div>
+		  <!-- Sunrise and Sunset Block -->
+		  <div class="card mb-3">
+			<div class="card-body">
+			  <h4 class="card-title">Sun Times</h4>
+			  <p>Sunrise: ${weatherInfo.sunrise}</p>
+			  <p>Sunset: ${weatherInfo.sunset}</p>
+			</div>
+		  </div>
+		</div>
+		<!-- Other Weather Details Section -->
+		<div class="card bg-light mb-3">
+		  <div class="card-body">
+			<h4 class="card-title">Other Weather Details</h4>
+			<p class="card-text">Data not available</p>
+		  </div>
 		</div>
 	  </div>
-          <div class="row">
-            <div class="col">
-              <p>Min: ${weatherInfo.minTemperature}°C</p>
-            </div>
-            <div class="col">
-              <p>Max: ${weatherInfo.maxTemperature}°C</p>
-            </div>
-            <div class="col">
-              <p>Weather: ${weatherInfo.weather}</p>
-            </div>
-            <div class="col">
-              <p>Humidity: ${weatherInfo.humidity}%</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card bg-light mb-3">
-  <div class="card-body">
-    <div class="row align-items-center">
-      <!-- Logo Column -->
-      <div class="col-md-2 text-center">
-        <img src="air-quality.png" alt="Air Quality Logo" class="img-fluid" style="max-width: 100px;">
-      </div>
-      <!-- Air Quality Information Column -->
-      <div class="col-md-10">
-        <h4 class="card-title">Air Quality ${weatherInfo.name}</h4>
-        <div class="row">
-          <div class="col">
-            <p>Air Quality Index: ${weatherInfo.aqi}</p>
-          </div>
-          <div class="col">
-            <p>PM 2.5: ${weatherInfo.pm2_5}</p>
-          </div>
-          <div class="col">
-            <p>PM 10: ${weatherInfo.pm10}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-      <!-- Third Section - Other Weather Details (Placeholder) -->
-      <div class="card bg-light mb-3">
-        <div class="card-body">
-          <h4 class="card-title">Other Weather Details</h4>
-          <p class="card-text">Data not available</p>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
+	`;
+  }
+  
 
 function updateBackgroundImage(weatherCondition) {
 	console.log("hey" + weatherCondition);
